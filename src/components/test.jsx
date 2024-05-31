@@ -46,6 +46,7 @@ const CompareExcelNames = () => {
             <input type="file" accept=".xlsx" multiple onChange={handleFileUpload} />
             <h2>Лишнее или недостающее имя:</h2>
             {missingName !== null ? <p>{missingName}</p> : <p>Загрузите файлы для сравнения</p>}
+            <strong>test</strong>
         </div>
     );
 };
