@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 
 const CompareExcelNames = () => {
-    const [missingOrExtraNames, setMissingOrExtraNames] = useState([]);
+    const [missingName, setMissingName] = useState(null);
 
     const handleFileUpload = (e) => {
         const files = e.target.files;
@@ -32,14 +32,10 @@ const CompareExcelNames = () => {
                 const names1 = new Set(data1.map(row => row['FULL_NAME']));
                 const names2 = new Set(data2.map(row => row['FULL_NAME']));
 
-                // Find names in names1 that are not in names2
-                const missingNames1 = [...names1].filter(name => !names2.has(name));
-                // Find names in names2 that are not in names1
-                const missingNames2 = [...names2].filter(name => !names1.has(name));
-
-                // Combine missing names from both sets
-                const allMissingOrExtraNames = [...missingNames1, ...missingNames2];
-                setMissingOrExtraNames(allMissingOrExtraNames);
+                // Find the missing or extra name
+                const missing = [...names1].find(name => !names2.has(name)) ||
+                    [...names2].find(name => !names1.has(name));
+                setMissingName(missing);
             })
             .catch(error => console.error('Ошибка при чтении файлов:', error));
     };
@@ -48,16 +44,8 @@ const CompareExcelNames = () => {
         <div>
             <h1>Сравнение файлов Excel по именам</h1>
             <input type="file" accept=".xlsx" multiple onChange={handleFileUpload} />
-            <h2>Лишние или недостающие имена:</h2>
-            {missingOrExtraNames.length > 0 ? (
-                <ul>
-                    {missingOrExtraNames.map((name, index) => (
-                        <li key={index}>{name}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Все имена совпадают или файлы не загружены</p>
-            )}
+            <h2>Лишнее или недостающее имя:</h2>
+            {missingName !== null ? <p>{missingName}</p> : <p>Загрузите файлы для сравнения</p>}
         </div>
     );
 };
