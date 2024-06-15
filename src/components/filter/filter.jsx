@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-const CompareExcelNames = () => {
-    const [missingName, setMissingName] = useState(null);
+const CompareExcelIDs = () => {
+    const [extraIDs, setExtraIDs] = useState([]);
 
     const handleFileUpload = (e) => {
         const files = e.target.files;
@@ -29,26 +29,37 @@ const CompareExcelNames = () => {
 
         Promise.all([readFile(files[0]), readFile(files[1])])
             .then(([data1, data2]) => {
-                const names1 = new Set(data1.map(row => row['FULL_NAME']));
-                const names2 = new Set(data2.map(row => row['FULL_NAME']));
+                const ids1 = data1.map(row => row['ISSUANCE_ID']);
+                const ids2 = data2.map(row => row['ISSUANCE_ID']);
 
-                // Find the missing or extra name
-                const missing = [...names1].find(name => !names2.has(name)) ||
-                    [...names2].find(name => !names1.has(name));
-                setMissingName(missing);
+                const idsSet1 = new Set(ids1);
+                const idsSet2 = new Set(ids2);
+
+                const extraInFirst = ids1.filter(id => !idsSet2.has(id));
+                const extraInSecond = ids2.filter(id => !idsSet1.has(id));
+
+                const allExtraIDs = [...new Set([...extraInFirst, ...extraInSecond])];
+                setExtraIDs(allExtraIDs);
             })
             .catch(error => console.error('Ошибка при чтении файлов:', error));
     };
 
     return (
         <div>
-            <h1>Сравнение файлов Excel по именам</h1>
+            <h1>Сравнение файлов Excel по ISSUANCE_ID</h1>
             <input type="file" accept=".xlsx" multiple onChange={handleFileUpload} />
-            <h2>Лишнее или недостающее имя:</h2>
-            {missingName !== null ? <p>{missingName}</p> : <p>Загрузите файлы для сравнения</p>}
-            <strong>test</strong>
+            <h2>Лишние ID:</h2>
+            {extraIDs.length > 0 ? (
+                <ul>
+                    {extraIDs.map((id, index) => (
+                        <li key={index}>{id}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Загрузите файлы для сравнения</p>
+            )}
         </div>
     );
 };
 
-export default CompareExcelNames;
+export default CompareExcelIDs;

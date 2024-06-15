@@ -1,11 +1,11 @@
 import React from 'react';
-import CompareExcelIDs from "./components/test";
+import CompareExcelIDs from "./components/filter/filter";
 
 const App = () => {
     return (
-        <div>
-          <CompareExcelIDs />
-        </div>
+        <>
+            <CompareExcelIDs />
+        </>
     );
 };
 
