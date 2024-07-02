@@ -1,10 +1,10 @@
 import React from 'react';
-import CompareExcelIDs from "./components/filter/filter";
+import MainRoutes from "./routes/mainRoutes";
 
 const App = () => {
     return (
         <>
-            <CompareExcelIDs />
+           <MainRoutes />
         </>
     );
 };
