@@ -62,7 +62,7 @@ const CompareExcelIDs = () => {
             {results.missing.length > 0 ? (
                 <ul>
                     {results.missing.map((id, index) => (
-                        <span className='filter-issuances' key={index}>{id}</span>
+                        <p key={index}>{id}</p>
                     ))}
                 </ul>
             ) : (
@@ -72,7 +72,7 @@ const CompareExcelIDs = () => {
             {results.duplicates.length > 0 ? (
                 <ul>
                     {results.duplicates.map((id, index) => (
-                        <span className='filter-issuances' key={index}>{id}</span>
+                        <p key={index}>{id}</p>
                     ))}
                 </ul>
             ) : (
